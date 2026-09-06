@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FSR Lehramt Uni Potsdam</title>
+<!-- Markdown-Renderer für die Protokollseite -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -82,6 +84,98 @@
     padding: 8px;
     text-align: left;
   }
+
+  /* Begrüßung */
+  .begruessung {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+
+  /* News-Kacheln */
+  .news-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .news-kachel {
+    border: 1px solid #ccc;
+    padding: 12px 14px;
+    cursor: pointer;
+    background: #fafafa;
+  }
+  .news-kachel:hover {
+    background: #f0f0f0;
+    border-color: #888;
+  }
+  .news-kachel .datum {
+    font-size: 0.8rem;
+    color: #777;
+  }
+  .news-kachel .titel {
+    font-weight: bold;
+    margin-top: 2px;
+  }
+
+  /* Overlay / Modal */
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+  }
+  .overlay.active {
+    display: flex;
+  }
+  .overlay-inhalt {
+    background: #fff;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    position: relative;
+    border: 1px solid #333;
+  }
+  .overlay-schliessen {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  /* Protokolle */
+  .protokoll-liste {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .protokoll-liste button {
+    border: 1px solid #999;
+    background: #fafafa;
+    padding: 8px 14px;
+    cursor: pointer;
+  }
+  .protokoll-liste button:hover {
+    background: #eee;
+  }
+  .protokoll-liste button.active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+  }
+  #protokoll-inhalt {
+    border: 1px solid #ccc;
+    padding: 16px;
+    min-height: 100px;
+  }
 </style>
 </head>
 <body>
@@ -102,8 +196,9 @@
 
   <section id="startseite" class="active">
     <h2>Startseite</h2>
-    <div class="platzhalter">{Text hier}</div>
-    <div class="platzhalter">{Text hier}</div>
+    <p class="begruessung">Willkommen auf der Seite des Fachschaftsrats Lehramt! :)</p>
+
+    <div class="news-liste" id="news-liste"></div>
   </section>
 
   <section id="termine">
@@ -126,12 +221,11 @@
 
   <section id="protokolle">
     <h2>Protokolle</h2>
-    <div class="platzhalter">{Text hier}</div>
-    <ul>
-      <li>{Text hier}</li>
-      <li>{Text hier}</li>
-      <li>{Text hier}</li>
-    </ul>
+    <p>Wählt ein Sitzungsdatum aus, um das Protokoll anzuzeigen.</p>
+    <div class="protokoll-liste" id="protokoll-liste"></div>
+    <div id="protokoll-inhalt">
+      <span class="platzhalter">Noch kein Protokoll ausgewählt.</span>
+    </div>
   </section>
 
   <section id="satzung">
@@ -150,7 +244,18 @@
   {Text hier}
 </footer>
 
+<!-- News-Overlay -->
+<div class="overlay" id="news-overlay">
+  <div class="overlay-inhalt">
+    <button class="overlay-schliessen" id="news-overlay-schliessen">&times;</button>
+    <h3 id="news-overlay-titel"></h3>
+    <p id="news-overlay-datum" style="color:#777; font-size:0.85rem;"></p>
+    <p id="news-overlay-text"></p>
+  </div>
+</div>
+
 <script>
+  /* ---------- Navigation ---------- */
   const buttons = document.querySelectorAll('.navbtn');
   const sections = document.querySelectorAll('main section');
 
@@ -162,6 +267,78 @@
       btn.classList.add('active');
       document.getElementById(btn.dataset.target).classList.add('active');
     });
+  });
+
+  /* ---------- News-Kacheln ---------- */
+  // Platzhalter-News: Titel, Datum und Text später einfach anpassen/ergänzen
+  const newsListe = [
+    { titel: "{Text hier}", datum: "{Text hier}", text: "{Text hier}" },
+    { titel: "{Text hier}", datum: "{Text hier}", text: "{Text hier}" },
+    { titel: "{Text hier}", datum: "{Text hier}", text: "{Text hier}" }
+  ];
+
+  const newsContainer = document.getElementById('news-liste');
+  const newsOverlay = document.getElementById('news-overlay');
+  const newsOverlayTitel = document.getElementById('news-overlay-titel');
+  const newsOverlayDatum = document.getElementById('news-overlay-datum');
+  const newsOverlayText = document.getElementById('news-overlay-text');
+
+  newsListe.forEach(eintrag => {
+    const kachel = document.createElement('div');
+    kachel.className = 'news-kachel';
+    kachel.innerHTML = `
+      <div class="datum">${eintrag.datum}</div>
+      <div class="titel">${eintrag.titel}</div>
+    `;
+    kachel.addEventListener('click', () => {
+      newsOverlayTitel.textContent = eintrag.titel;
+      newsOverlayDatum.textContent = eintrag.datum;
+      newsOverlayText.textContent = eintrag.text;
+      newsOverlay.classList.add('active');
+    });
+    newsContainer.appendChild(kachel);
+  });
+
+  document.getElementById('news-overlay-schliessen').addEventListener('click', () => {
+    newsOverlay.classList.remove('active');
+  });
+  newsOverlay.addEventListener('click', (e) => {
+    if (e.target === newsOverlay) newsOverlay.classList.remove('active');
+  });
+
+  /* ---------- Protokolle ---------- */
+  // Für jedes Sitzungsdatum den Dateinamen der zugehörigen .md-Datei eintragen
+  const protokollListe = [
+    { datum: "10.01.2024", datei: "protokolle/2024-01-10.md" },
+    { datum: "14.02.2024", datei: "protokolle/2024-02-14.md" },
+    { datum: "20.03.2024", datei: "protokolle/2024-03-20.md" }
+  ];
+
+  const protokollListeContainer = document.getElementById('protokoll-liste');
+  const protokollInhalt = document.getElementById('protokoll-inhalt');
+  const protokollButtons = [];
+
+  protokollListe.forEach(eintrag => {
+    const btn = document.createElement('button');
+    btn.textContent = eintrag.datum;
+    btn.addEventListener('click', async () => {
+      protokollButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      protokollInhalt.innerHTML = '<span class="platzhalter">Lade Protokoll …</span>';
+      try {
+        const antwort = await fetch(eintrag.datei);
+        if (!antwort.ok) throw new Error('Datei nicht gefunden');
+        const markdownText = await antwort.text();
+        protokollInhalt.innerHTML = marked.parse(markdownText);
+      } catch (fehler) {
+        protokollInhalt.innerHTML =
+          '<span class="platzhalter">Protokoll konnte nicht geladen werden. ' +
+          'Liegt die Datei "' + eintrag.datei + '" im richtigen Ordner?</span>';
+      }
+    });
+    protokollButtons.push(btn);
+    protokollListeContainer.appendChild(btn);
   });
 </script>
 
