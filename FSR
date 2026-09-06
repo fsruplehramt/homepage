@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FSR Lehramt Uni Potsdam</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+    background: #fff;
+    line-height: 1.5;
+  }
+  header {
+    border-bottom: 2px solid #333;
+    padding: 16px 24px;
+  }
+  header h1 {
+    margin: 0 0 12px 0;
+    font-size: 1.4rem;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  nav button {
+    background: none;
+    border: 1px solid #999;
+    padding: 8px 14px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    color: #222;
+  }
+  nav button:hover {
+    background: #eee;
+  }
+  nav button.active {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+  }
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 6px;
+  }
+  .platzhalter {
+    background: #f5f5f5;
+    border: 1px dashed #aaa;
+    padding: 12px;
+    margin: 12px 0;
+    color: #555;
+  }
+  footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #ccc;
+    margin-top: 24px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FSR Lehramt Uni Potsdam</h1>
+  <nav>
+    <button class="navbtn active" data-target="startseite">Startseite</button>
+    <button class="navbtn" data-target="termine">Termine</button>
+    <button class="navbtn" data-target="fsr">Dein FSR</button>
+    <button class="navbtn" data-target="protokolle">Protokolle</button>
+    <button class="navbtn" data-target="satzung">Satzung</button>
+    <button class="navbtn" data-target="impressum">Impressum</button>
+  </nav>
+</header>
+
+<main>
+
+  <section id="startseite" class="active">
+    <h2>Startseite</h2>
+    <div class="platzhalter">{Text hier}</div>
+    <div class="platzhalter">{Text hier}</div>
+  </section>
+
+  <section id="termine">
+    <h2>Termine</h2>
+    <div class="platzhalter">{Text hier}</div>
+    <table>
+      <tr><th>Datum</th><th>Uhrzeit</th><th>Veranstaltung</th><th>Ort</th></tr>
+      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+    </table>
+  </section>
+
+  <section id="fsr">
+    <h2>Dein FSR</h2>
+    <div class="platzhalter">{Text hier}</div>
+    <div class="platzhalter">{Text hier}</div>
+    <div class="platzhalter">{Text hier}</div>
+  </section>
+
+  <section id="protokolle">
+    <h2>Protokolle</h2>
+    <div class="platzhalter">{Text hier}</div>
+    <ul>
+      <li>{Text hier}</li>
+      <li>{Text hier}</li>
+      <li>{Text hier}</li>
+    </ul>
+  </section>
+
+  <section id="satzung">
+    <h2>Unsere Satzung</h2>
+    <div class="platzhalter">{Text hier}</div>
+  </section>
+
+  <section id="impressum">
+    <h2>Impressum</h2>
+    <div class="platzhalter">{Text hier}</div>
+  </section>
+
+</main>
+
+<footer>
+  {Text hier}
+</footer>
+
+<script>
+  const buttons = document.querySelectorAll('.navbtn');
+  const sections = document.querySelectorAll('main section');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
