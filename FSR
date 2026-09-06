@@ -93,7 +93,7 @@
     <button class="navbtn" data-target="termine">Termine</button>
     <button class="navbtn" data-target="fsr">Dein FSR</button>
     <button class="navbtn" data-target="protokolle">Protokolle</button>
-    <button class="navbtn" data-target="satzung">Satzung</button>
+    <button class="navbtn" data-target="satzung">Unsere Satzung</button>
     <button class="navbtn" data-target="impressum">Impressum</button>
   </nav>
 </header>
