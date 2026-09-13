@@ -4,153 +4,248 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FSR Lehramt Uni Potsdam</title>
+
+<!-- Google Fonts: Poppins (Überschriften) + Inter (Fließtext) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <!-- Markdown-Renderer für die Protokollseite -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <style>
+  :root {
+    --rot: #c1272d;
+    --rot-dunkel: #8e1f24;
+    --gruen: #7cb93f;
+    --gruen-dunkel: #4f8a28;
+    --braun-dunkel: #2b1b12;
+    --braun-mittel: #3d2a1c;
+    --creme: #fbf6ee;
+    --text-dunkel: #2b211b;
+    --text-hell: #f4ede1;
+    --rand: #e6dcc9;
+  }
+
   * { box-sizing: border-box; }
+
   body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #222;
-    background: #fff;
-    line-height: 1.5;
+    font-family: 'Inter', Arial, sans-serif;
+    color: var(--text-dunkel);
+    background: var(--creme);
+    line-height: 1.6;
   }
-  header {
-    border-bottom: 2px solid #333;
-    padding: 16px 24px;
+
+  h1, h2, h3 {
+    font-family: 'Poppins', Arial, sans-serif;
+    margin: 0;
   }
-  header h1 {
-    margin: 0 0 12px 0;
-    font-size: 1.4rem;
-  }
-  nav {
+
+  /* ---------- Layout ---------- */
+  .app {
     display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  nav button {
-    background: none;
-    border: 1px solid #999;
-    padding: 8px 14px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    color: #222;
-  }
-  nav button:hover {
-    background: #eee;
-  }
-  nav button.active {
-    background: #333;
-    color: #fff;
-    border-color: #333;
-  }
-  main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 24px;
-  }
-  section {
-    display: none;
-  }
-  section.active {
-    display: block;
-  }
-  h2 {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 6px;
-  }
-  .platzhalter {
-    background: #f5f5f5;
-    border: 1px dashed #aaa;
-    padding: 12px;
-    margin: 12px 0;
-    color: #555;
-  }
-  footer {
-    text-align: center;
-    padding: 16px;
-    font-size: 0.85rem;
-    color: #777;
-    border-top: 1px solid #ccc;
-    margin-top: 24px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 12px 0;
-  }
-  th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
+    min-height: 100vh;
   }
 
-  /* Begrüßung */
-  .begruessung {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-  }
-
-  /* News-Kacheln */
-  .news-liste {
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--braun-dunkel);
+    color: var(--text-hell);
+    padding: 28px 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 28px;
+  }
+
+  .sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sidebar__brand img {
+    width: 52px;
+    height: auto;
+  }
+
+  .sidebar__brand-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .sidebar__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sidebar__nav button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text-hell);
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .sidebar__nav button:hover {
+    background: rgba(255,255,255,0.08);
+    opacity: 1;
+  }
+
+  .sidebar__nav button.active {
+    background: var(--rot);
+    opacity: 1;
+  }
+
+  .sidebar__footer {
+    margin-top: auto;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  /* ---------- Hamburger (mobil) ---------- */
+  .hamburger {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 50;
+    background: var(--braun-dunkel);
+    border: none;
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-hell);
+    margin: 4px auto;
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 39;
+  }
+  .sidebar-overlay.active { display: block; }
+
+  /* ---------- Main ---------- */
+  main {
+    flex: 1;
+    padding: 40px 48px;
+    max-width: 900px;
+  }
+
+  section { display: none; }
+  section.active { display: block; }
+
+  .section__header {
+    margin-bottom: 24px;
+  }
+
+  .section__title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--rot-dunkel);
+    border-left: 5px solid var(--gruen);
+    padding-left: 14px;
+  }
+
+  /* ---------- Startseite / Hero ---------- */
+  .hero {
+    background: linear-gradient(135deg, var(--rot) 0%, var(--rot-dunkel) 100%);
+    color: var(--text-hell);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 32px;
+  }
+  .hero h2 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  .hero p {
+    margin: 0;
+    opacity: 0.95;
+  }
+
+  .news-liste {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
   }
   .news-kachel {
-    border: 1px solid #ccc;
-    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--rand);
+    border-left: 4px solid var(--gruen);
+    border-radius: 10px;
+    padding: 16px;
     cursor: pointer;
-    background: #fafafa;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
   .news-kachel:hover {
-    background: #f0f0f0;
-    border-color: #888;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(43,27,18,0.1);
   }
   .news-kachel .datum {
     font-size: 0.8rem;
-    color: #777;
+    color: var(--gruen-dunkel);
+    font-weight: 600;
   }
   .news-kachel .titel {
-    font-weight: bold;
-    margin-top: 2px;
+    font-weight: 700;
+    margin-top: 4px;
+    color: var(--text-dunkel);
   }
 
-  /* Overlay / Modal */
-  .overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    z-index: 100;
-  }
-  .overlay.active {
-    display: flex;
-  }
-  .overlay-inhalt {
+  /* ---------- Platzhalter ---------- */
+  .platzhalter {
     background: #fff;
-    max-width: 500px;
-    width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 20px;
-    position: relative;
-    border: 1px solid #333;
-  }
-  .overlay-schliessen {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    background: none;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
+    border: 1px dashed #b9a98c;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 12px 0;
+    color: #6b5e4c;
   }
 
-  /* Protokolle */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid var(--rand);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background: var(--rot);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ---------- Protokolle ---------- */
   .protokoll-liste {
     display: flex;
     flex-wrap: wrap;
@@ -158,103 +253,208 @@
     margin-bottom: 20px;
   }
   .protokoll-liste button {
-    border: 1px solid #999;
-    background: #fafafa;
-    padding: 8px 14px;
+    border: 1px solid var(--rot);
+    background: #fff;
+    color: var(--rot-dunkel);
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
+    font-weight: 500;
   }
   .protokoll-liste button:hover {
-    background: #eee;
+    background: #fbe9e9;
   }
   .protokoll-liste button.active {
-    background: #333;
+    background: var(--rot);
     color: #fff;
-    border-color: #333;
   }
   #protokoll-inhalt {
-    border: 1px solid #ccc;
-    padding: 16px;
+    background: #fff;
+    border: 1px solid var(--rand);
+    border-radius: 10px;
+    padding: 20px;
     min-height: 100px;
+  }
+
+  /* ---------- Overlay / Modal ---------- */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(43,27,18,0.55);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 100;
+  }
+  .overlay.active { display: flex; }
+  .overlay-inhalt {
+    background: #fff;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 24px;
+    border-radius: 12px;
+    position: relative;
+  }
+  .overlay-schliessen {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #999;
+  }
+  .overlay h3 {
+    color: var(--rot-dunkel);
+    margin-bottom: 4px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.85rem;
+    color: #8a7c66;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 800px) {
+    .hamburger { display: block; }
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      transform: translateX(-100%);
+      transition: transform 0.2s ease;
+      z-index: 40;
+    }
+    .sidebar.open { transform: translateX(0); }
+    main { padding: 80px 20px 40px; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>FSR Lehramt Uni Potsdam</h1>
-  <nav>
-    <button class="navbtn active" data-target="startseite">Startseite</button>
-    <button class="navbtn" data-target="termine">Termine</button>
-    <button class="navbtn" data-target="fsr">Dein FSR</button>
-    <button class="navbtn" data-target="protokolle">Protokolle</button>
-    <button class="navbtn" data-target="satzung">Unsere Satzung</button>
-    <button class="navbtn" data-target="impressum">Impressum</button>
-  </nav>
-</header>
+<button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+  <span></span><span></span><span></span>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<main>
+<div class="app">
 
-  <section id="startseite" class="active">
-    <h2>Startseite</h2>
-    <p class="begruessung">Willkommen auf der Seite des Fachschaftsrats Lehramt! :)</p>
-
-    <div class="news-liste" id="news-liste"></div>
-  </section>
-
-  <section id="termine">
-    <h2>Termine</h2>
-    <div class="platzhalter">{Text hier}</div>
-    <table>
-      <tr><th>Datum</th><th>Uhrzeit</th><th>Veranstaltung</th><th>Ort</th></tr>
-      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
-      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
-      <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
-    </table>
-  </section>
-
-  <section id="fsr">
-    <h2>Dein FSR</h2>
-    <div class="platzhalter">{Text hier}</div>
-    <div class="platzhalter">{Text hier}</div>
-    <div class="platzhalter">{Text hier}</div>
-  </section>
-
-  <section id="protokolle">
-    <h2>Protokolle</h2>
-    <p>Wählt ein Sitzungsdatum aus, um das Protokoll anzuzeigen.</p>
-    <div class="protokoll-liste" id="protokoll-liste"></div>
-    <div id="protokoll-inhalt">
-      <span class="platzhalter">Noch kein Protokoll ausgewählt.</span>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <img src="assets/logo.png" alt="Logo FSR Lehramt">
+      <div class="sidebar__brand-text">FSR Lehramt<br>Uni Potsdam</div>
     </div>
-  </section>
 
-  <section id="satzung">
-    <h2>Unsere Satzung</h2>
-    <div class="platzhalter">{Text hier}</div>
-  </section>
+    <nav class="sidebar__nav">
+      <ul>
+        <li><button class="navbtn active" data-target="startseite">Startseite</button></li>
+        <li><button class="navbtn" data-target="termine">Termine</button></li>
+        <li><button class="navbtn" data-target="fsr">Dein FSR</button></li>
+        <li><button class="navbtn" data-target="protokolle">Protokolle</button></li>
+        <li><button class="navbtn" data-target="satzung">Unsere Satzung</button></li>
+        <li><button class="navbtn" data-target="impressum">Impressum</button></li>
+      </ul>
+    </nav>
 
-  <section id="impressum">
-    <h2>Impressum</h2>
-    <div class="platzhalter">{Text hier}</div>
-  </section>
+    <div class="sidebar__footer">{Text hier}</div>
+  </aside>
 
-</main>
+  <main>
 
-<footer>
-  {Text hier}
-</footer>
+    <section id="startseite" class="active">
+      <div class="hero">
+        <h2>Willkommen auf der Seite des Fachschaftsrats Lehramt! :)</h2>
+        <p>{Text hier}</p>
+      </div>
+
+      <div class="section__header">
+        <h2 class="section__title">Aktuelles</h2>
+      </div>
+      <div class="news-liste" id="news-liste"></div>
+    </section>
+
+    <section id="termine">
+      <div class="section__header">
+        <h2 class="section__title">Termine</h2>
+      </div>
+      <div class="platzhalter">{Text hier}</div>
+      <table>
+        <tr><th>Datum</th><th>Uhrzeit</th><th>Veranstaltung</th><th>Ort</th></tr>
+        <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+        <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+        <tr><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td><td>{Text hier}</td></tr>
+      </table>
+    </section>
+
+    <section id="fsr">
+      <div class="section__header">
+        <h2 class="section__title">Dein FSR</h2>
+      </div>
+      <div class="platzhalter">{Text hier}</div>
+      <div class="platzhalter">{Text hier}</div>
+      <div class="platzhalter">{Text hier}</div>
+    </section>
+
+    <section id="protokolle">
+      <div class="section__header">
+        <h2 class="section__title">Protokolle</h2>
+      </div>
+      <p>Wählt ein Sitzungsdatum aus, um das Protokoll anzuzeigen.</p>
+      <div class="protokoll-liste" id="protokoll-liste"></div>
+      <div id="protokoll-inhalt">
+        <span class="platzhalter">Noch kein Protokoll ausgewählt.</span>
+      </div>
+    </section>
+
+    <section id="satzung">
+      <div class="section__header">
+        <h2 class="section__title">Unsere Satzung</h2>
+      </div>
+      <div class="platzhalter">{Text hier}</div>
+    </section>
+
+    <section id="impressum">
+      <div class="section__header">
+        <h2 class="section__title">Impressum</h2>
+      </div>
+      <div class="platzhalter">{Text hier}</div>
+    </section>
+
+  </main>
+</div>
+
+<footer>{Text hier}</footer>
 
 <!-- News-Overlay -->
 <div class="overlay" id="news-overlay">
   <div class="overlay-inhalt">
     <button class="overlay-schliessen" id="news-overlay-schliessen">&times;</button>
     <h3 id="news-overlay-titel"></h3>
-    <p id="news-overlay-datum" style="color:#777; font-size:0.85rem;"></p>
+    <p id="news-overlay-datum" style="color:#999; font-size:0.85rem;"></p>
     <p id="news-overlay-text"></p>
   </div>
 </div>
 
 <script>
+  /* ---------- Mobile Sidebar ---------- */
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger');
+  const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('active');
+  });
+  sidebarOverlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+  });
+
   /* ---------- Navigation ---------- */
   const buttons = document.querySelectorAll('.navbtn');
   const sections = document.querySelectorAll('main section');
@@ -266,11 +466,13 @@
 
       btn.classList.add('active');
       document.getElementById(btn.dataset.target).classList.add('active');
+
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
     });
   });
 
   /* ---------- News-Kacheln ---------- */
-  // Platzhalter-News: Titel, Datum und Text später einfach anpassen/ergänzen
   const newsListe = [
     { titel: "{Text hier}", datum: "{Text hier}", text: "{Text hier}" },
     { titel: "{Text hier}", datum: "{Text hier}", text: "{Text hier}" },
@@ -307,10 +509,10 @@
   });
 
   /* ---------- Protokolle ---------- */
-  // Für jedes Sitzungsdatum den Dateinamen der zugehörigen .md-Datei eintragen
   const protokollListe = [
-    { datum: "01.XX.XXXX", datei: "protokolle/PP1" },
-    { datum: "02.XX.XXXX", datei: "protokolle/PP2" }
+    { datum: "10.01.2024", datei: "protokolle/2024-01-10.md" },
+    { datum: "14.02.2024", datei: "protokolle/2024-02-14.md" },
+    { datum: "20.03.2024", datei: "protokolle/2024-03-20.md" }
   ];
 
   const protokollListeContainer = document.getElementById('protokoll-liste');
