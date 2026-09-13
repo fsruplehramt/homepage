@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FSR Lehramt Uni Potsdam</title>
 
-<!-- Google Fonts: Poppins (Überschriften) + Inter (Fließtext) -->
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- Markdown-Renderer für die Protokollseite -->
+<!-- Markdown-Renderer -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <style>
@@ -170,7 +170,7 @@
     padding-left: 14px;
   }
 
-  /* ---------- Startseite / Hero ---------- */
+  /* ---------- Startseite ---------- */
   .hero {
     background: linear-gradient(135deg, var(--rot) 0%, var(--rot-dunkel) 100%);
     color: var(--text-hell);
@@ -276,7 +276,7 @@
     min-height: 100px;
   }
 
-  /* ---------- Overlay / Modal ---------- */
+  /* ---------- Overlay ---------- */
   .overlay {
     display: none;
     position: fixed;
@@ -510,9 +510,8 @@
 
   /* ---------- Protokolle ---------- */
   const protokollListe = [
-    { datum: "10.01.2024", datei: "protokolle/2024-01-10.md" },
-    { datum: "14.02.2024", datei: "protokolle/2024-02-14.md" },
-    { datum: "20.03.2024", datei: "protokolle/2024-03-20.md" }
+    { datum: "10.01.2024", datei: "protokolle/PP1.md" },
+    { datum: "14.02.2024", datei: "protokolle/PP2.md" }
   ];
 
   const protokollListeContainer = document.getElementById('protokoll-liste');
