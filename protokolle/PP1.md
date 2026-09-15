@@ -1,1 +1,0 @@
-Sitzungsprotokolltext yoooooo
